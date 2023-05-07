@@ -1,0 +1,159 @@
+---
+title: "Developing Different Machine Learning Algorithms to Predict Coronary Heart Disease "
+author: 
+       - Gifty Pokuaa
+       - EXST 7087 Project Proposal
+       - Dr. Thanos Gentimis
+date: "2023-02-20"
+output:
+  pdf_document: default
+  html_document: default
+---
+### Introduction\
+
+
+One of the most complex and deadly human diseases in the world is coronary heart disease. In 2019, 32% of all global deaths were due cardiovascular disease. Approximately, 17.9 million people died from cardiovascular disease which is all types of diseases that affect the heart or the blood vessels. Out of these deaths, 85% of these deaths were due to heart attack and stroke. More than one third of cardiovascular disease deaths take place in low- and middle-class countries (WHO, 2021). Again, it is estimated that 4 to 5 million people in United States have chronic heart failure with 400000 new cases occurring each year (Gheorghiade & Bonow, 1998). Early detection of this deadly heart disease could help save thousands of lives every year. Therefore, the purpose of this study is to use supervised machine learning models such as logistics regression, support vector machine, naïve bayes and random forest to predict coronary heart disease in patient.\
+
+### Data Description\
+
+The dataset for this study is a subset of Heart Disease Data set obtained from UCI Machine Learning Repository(Dua & Graff,2019) with 297 observations. The dataset has 74 attributes; heart disease in patient, demographic,  and medical attributes of patients. This study will only consider the predictor variables of interest, which include age, sex, type of chest pain, resting blood pressure, etc. The outcome variable of the study will be **heart disease present**, which is a binary variable with outcomes 0(No) and 1(Yes).\
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r,include=FALSE}
+library(psych)
+library(tidyverse)
+library(kableExtra)
+library(knitr)
+library(SmartEDA)
+```
+
+
+```{r, include= TRUE,echo=FALSE,comment=NA,warning=FALSE}
+heart<-read.csv("heart.csv")
+n<-head(heart,1)
+
+
+```
+
+```{r,include= TRUE,echo=FALSE,comment=NA,warning=FALSE}
+knitr::kable(n, caption = "First Row of the Dataset","simple")
+
+```
+
+
+Supervised machine learning models such as **logistics regression, support vector machine, naïve bayes and random forest** will be used to predict coronary heart disease in patient, and compare the models' accuracy.\
+
+
+\newpage
+
+## Appendix 1\
+
+
+
+```{r,include= TRUE,echo=FALSE,comment=NA,warning=FALSE}
+heartc<-subset(heart[c("sex","cp","fbs","restecg","exang","condition")])
+b=ExpCustomStat(heartc,Cvar=c("condition"),gpby=FALSE)
+knitr::kable(b,caption = "Summary Statistics on Patient's Heart Disease Condition", "simple")
+
+```
+
+**Summary Statistics on Predictor Variables**\
+
+```{r,include=FALSE}
+library(reticulate)
+py_install("pandas")
+py_install("matplotlib")
+py_install("seaborn")
+use_python("/Users/giftypokuaa/Library/r-miniconda-arm64/envs/r-reticulate/bin/python")
+```
+
+
+```{python,results="hide",echo=FALSE}
+import numpy
+import os
+import pandas as pd
+import matplotlib.pyplot as plt  
+import seaborn as s
+
+h=pd.read_csv("heart.csv")
+hn=h[["age","trestbps","chol","thalach","oldpeak","thal"]]
+hc=h[["sex","cp","fbs","restecg","exang","condition"]]
+
+
+```
+
+```{python,echo=FALSE,results="Hide"}
+
+hc = hc.astype('object')
+d1=hn.describe()
+d2=hc.describe()
+d1
+d2
+#hc.groupby(["condition"]).count()["sex"]
+```
+
+
+```{r,include= TRUE,echo=FALSE,comment=NA,warning=FALSE}
+
+
+heart$sex <- as.factor(heart$sex)
+heart$cp <- as.factor(heart$cp)
+heart$fbs <- as.factor(heart$fbs)
+heart$exang <- as.factor(heart$exang)
+heart$thal <- as.numeric(heart$thal)
+heart$ restecg<- as.factor( heart$ restecg)
+heart$condition <- as.factor(heart$condition)
+heartc<-subset(heart[c("sex","cp","fbs","restecg","exang","condition")])
+
+
+
+summary(heartc)
+
+
+
+```
+
+## Appendix 2
+
+```{python,results="hide",echo=FALSE}
+  
+h=pd.read_csv("heart.csv")
+hc=h[["sex","cp","fbs","restecg","exang","condition"]]
+hn=h[["age","trestbps","chol","thalach","oldpeak","thal"]]
+hc = hc.astype('object')
+
+
+plt.figure(figsize=(15,10))
+plt.tight_layout()
+plt1=s.countplot(x="condition", data=hc)
+plt.title("Count plot of Present of Heart Disease in Patients")  
+plt.xlabel(' No Heart Disease(0)       Heart Disease(1) ')  
+plt.ylabel('Frequency') 
+plt.grid()
+plt.show()
+
+s.countplot(data=hc, x="condition", hue="sex")
+plt.title("Present of Heart Disease in Male(1) and Female(0) Patients") 
+plt.xlabel(' No Heart Disease(0)         Heart Disease(1) ')  
+plt.show()
+
+
+p2=s.pairplot(h  , hue="condition")
+plt.title("Pair Plot of Quantitative Predictors in the Data")  
+plt.show()
+```
+
+Correlation Plot of the Quantitative Predictors in the Data based on Heart Condition.
+
+
+
+## REFERENCES
+
+Dua, D. and Graff, C. (2019). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.
+  
+
+  

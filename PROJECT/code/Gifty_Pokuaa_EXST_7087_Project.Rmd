@@ -1,0 +1,314 @@
+---
+title: "Developing Different Machine Learning Algorithms to Predict Coronary Heart Disease "
+author: 
+       - Gifty Pokuaa
+       - EXST 7087 Final Project 
+       - Dr. Thanos Gentimis
+date: "2023-05-08"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+knitr::opts_chunk$set(fig.pos = "H", out.extra = "")
+```
+
+## Introduction\
+
+
+One of the most complex and deadly human diseases in the world is coronary heart disease. In 2019, $32\%$ of all global deaths were due cardiovascular disease. Approximately, 17.9 million people died from cardiovascular disease which is all types of diseases that affect the heart or the blood vessels. Out of these deaths, 85% of these deaths were due to heart attack and stroke. More than one third of cardiovascular disease deaths take place in low- and middle-class countries (WHO, 2021). Again, it is estimated that 4 to 5 million people in United States have chronic heart failure with $400000$ new cases occurring each year (Gheorghiade & Bonow, 1998). Early detection of this deadly heart disease could help save thousands of lives every year. Therefore, the purpose of this study is to use different supervised machine learning algorithms such as logistics regression, support vector machine and random forest to predict coronary heart disease in patient. The following research questions will enable us to explore the prediction accuracy of heart disease in patients using different machine learning techniques.\
+
+1. Could machine learning algorithms accurately predict the risk of coronary heart disease in patients?\
+
+
+2. Do these machine learning methods have the same prediction accuracy?\
+
+
+## Literature Review\
+
+Research in machine learning is constantly advancing due to its importance in human life. Hidden relationships that are invisible to humans are extracted by machine learning algorithms. These techniques make life and decision-making easier for computer users, industries, etc. One of the main advantages of machine learning algorithms is that once they learn to perform a task with data, they execute it automatically without constant supervision (Mahesh, 2018).\
+
+Machine learning algorithms play an important role in the early detection of coronary heart disease in patients. A study conducted by Ayatollahi et al. (2019) on predicting coronary heart disease using machine learning techniques such as support vector machines and neutral networks discovered that SVM has higher accuracy and performs better in predicting heart disease in patients than neutral network models. In contrast to Ayatollahi et al.'s (2019) findings, a study conducted by Akella & Akella (2021) to compare the performance of six different machine learning algorithms found that neural networks performed better with a prediction accuracy of $93\%$. The study further reported that other machine learning algorithms such as SVM, logistic regression, and random forest had a lower prediction accuracy between $79\%$ and $86\%$.\
+
+
+
+
+## Methodology\
+
+### Data Description\
+
+The dataset for this study is a subset of Heart Disease Data set obtained from the UCI Machine Learning Repository (Dua & Graff, 2019) with 297 observations. The dataset has 74 attributes; heart disease in patient, demographic,  and medical attributes of patients. This study will only consider 14 predictor variables of interest, which include age, sex, type of chest pain, resting blood pressure, etc. The outcome variable of the study will be **heart disease present**, which is a binary variable with outcomes 0(No) and 1(Yes).
+
+Figure 2 at Appendix 1 list all the fourteen variables of interest in the dataset with their associated datatype and a brief description of each variable. There were 297 observations in the data with an average age of 55 years old. Out of the 297 observations, $46.13\%$ were diagnosed with coronary heart disease while the remaining $53.87\%$ had no heart disease. There were 96 males in the dataset with 29 of them being diagnosed with heart disease. Out of 201 females in the dataset, 112 were diagnosed positively.\
+
+
+```{r, include= TRUE,echo=FALSE,comment=NA,warning=FALSE}
+heart<-read.csv("heart.csv")
+n<-head(heart,1)
+
+knitr::kable(n, caption = "First Row of the Dataset","simple")
+
+```
+
+
+\
+
+
+### Machine Learning Algorithms\
+
+
+According to Arthur Samuel machine learning is a “field of study that gives computers the ability to learn through data without being explicitly programmed”, where supervised machine learning is defined by Batta Mahesh (2018), as the task of learning a function that maps an input to an output based on input-output pairs. The datasets for supervised machine learning algorithms are divided into two groups: the train dataset for training algorithms and the test dataset for prediction. All machine learning algorithms learn patterns from the training dataset and then apply the learnt patterns to the test dataset for predictions or classification.\
+
+LOGISTIC REGRESSION\
+
+Logistic Regression is the most frequently used regression-like procedure to predict dichotomous or binary outcome variable. It is important if you want to predict the presence or absence of a characteristic or outcome based on some particular features.  Each observation’s condition or outcome is generally represented as a 0 for failure and 1 for a success. However, we focus solely on the probability of success. Logistic regression for p features or covariate can be written as\
+
+$P(y=1)$ = $\frac{1}{1+exp(-(b_0+b_1X_1+...+b_{14}X_{14}))}$\
+
+Where $P(y=1)$ is the probability of presence of coronary heart disease and $b0,b1$….. are the coefficients of the model. The features or covariates are combinations of continuous and categorical variables.\
+
+The Logistic function: expressing the relationship between the px and the
+independent variables as a nonlinear function. 
+
+Thus, $P(x_1, x_2,...,x_n)$=$\frac{exp(b_0+b_1X_1+...+b_{14}X_{14})}{1+exp(b_0+b_1X_1+...+b_{14}X_{14})}$\
+
+RANDOM FOREST\
+
+This is a commonly used supervised machine learning algorithm, and by its name, it is a forest of many randomly generated decision trees. A Classification Random Forest outputs the majority classification of all Decision Trees. It basically uses a bagging approach, where many learning models or trees are combined to reduce the prediction error and improve the overall results . It uses a random subset of features by splitting the node to obtain the best features that will contribute the most to building the model. Random Forest is robust to outliers.\
+ 
+A decision tree has a hierarchical tree structure consisting of three nodes: the root node, the decision node, and the leaf node. It could be used to solve both classification and regression problems. A decision tree starts with the root node, which normally has few branches, and then a decision is made at the decision node based on a certain condition. The leaf nodes, which are the last stage, represent all the final results or outcomes within the dataset. If a  single decision tree classifier is trained on the dataset using a maximum depth of three and four, we will get a tree looking like those below.\
+
+
+```{r ,echo=FALSE, figures-side, fig.show="hold", out.width="50%", fig.cap="\\label{fig:figs} A Single Decision Tree of Depth 3 and Depth 4 on Heart Disease Dataset"}
+
+par(mar = c(5, 5, .1, .1))
+
+knitr::include_graphics("/Users/giftypokuaa/Desktop/PROJECT/Results/decision4_tree.png")
+
+knitr::include_graphics("/Users/giftypokuaa/Desktop/PROJECT/Results/decision_tree.png")
+```
+
+
+
+\
+
+SUPPORT VECTOR MACHINE\
+
+Support vector machine (SVM) is a supervised machine learning  algorithm that is used to solve classification, and regression problems. It is mostly used to solve classification problems such as text and object classification.  In the SVM algorithm, we plot each data item as a point in n-dimensional space (where n is the number of features you have), with the value of each feature being the value of a particular coordinate. Then, we perform classification by finding the optimal hyper-plane that differentiates the two classes very well (look at the below snapshot).\
+Support Vectors are simply the coordinates of individual observation, and a hyper-plane is a form of SVM visualization. The SVM classifier is a frontier that best segregates the two classes (hyper-plane/line). Maximizing the distances between the nearest data point  and the hyper-plane will help us to decide the right hyper-plane.\
+
+
+```{r,echo=FALSE, out.width="70%",fig.align = 'center', fig.cap="\\label{fig:figs} Support Vector Machine"}
+knitr::include_graphics("/Users/giftypokuaa/Desktop/PROJECT/Results/s.jpeg")
+```
+
+
+## Result and Discussion\
+
+This study aimed to predict the presence of coronary heart disease in patients using four different supervised machine learning algorithms. Logistic regression, random forest, support vector machines, and neutral network models were developed on a classification problem dataset from the UCI Machine Learning Repository (Dua & Graff, 2019). However,  neutral network model is removed from the analysis due to a very low prediction accuracy of $33\%$ which could be due to the small size of the dataset.\
+
+Data screening was performed before developing the machine learning algorithms. During this process, the original dataset was divided into input dataset with 13 features and an output dataset with the response variable, heart disease condition. The input and output datasets were further split into train and test datasets at $10\%$ test and $90\%$ set and also at $20\%$ and $80\%$ train sets. All categorical variables in the dataset were changed to dummy variables using the pandas get dummies function. All the algorithms were trained or developed with the training dataset and applied to the test dataset for prediction or classification. After analyzing the models, we realized that a split of $90-10$ and $70-30$ of the dataset give a higher accuracy $(5\%-10\%\ higher\ accuracy)$ than a split $80-20$ and $>70-30$.\
+The performance of these algorithms were evaluated and compared using the accuracy metric . Other metrics such as precision, recall and F1 score were reported in the analysis but these are of less interest to the study.\ 
+
+
+
+**Confusion Matrix** is a matrix that is used to evaluate the performance of a model. The confusion matrix has four main terms which is used to determine the performance matrice:\
+
+True Positive (TP): An outcome when the positive class is correctly predicted by the model\
+
+True Negative (TN): An outcome when the negative class is true negative\
+
+False Positive (FP): An outcome when the positive class is incorrectly predicted by the model\
+
+False Negative (GN): An outcome when the negative class is incorrectly predicted by the model.\
+
+**Accuracy** is the proportion of total dataset instances that were correctly predicted out of the total instances. This is computed from the confusion matrix as below:\ 
+
+
+
+
+Accuracy = $\frac{TP+TN}{(TP+ TN+FP+GN)}$\
+
+
+As shown in **table 2**, an accuracy value higher than 0.86 is achieved with all the three models using $10\%$ test data size, with SVM having the highest prediction accuracy of $90\%$. Interestingly, logistic regression and random forest performs equally using $10\%$ test data size but performs differently using the 80-20 split rule. Overall, all the three models perform well in predicting the presence of heart disease in patients.
+
+
+
+```{r, echo=FALSE, fig.cap="\\label{fig:figs} ML MODELs COMPARISION at 10% and 20% TEST SIZE "}
+tab<-matrix(c(0.87,0.85,0.87,0.8,0.9,0.87),ncol = 2, byrow=TRUE)
+
+colnames(tab)<- c("Accuracy (90-10 split)","Accuracy (80-20 split)")
+
+rownames(tab)<-c("Logistic Regression","Random Forest","SVM")
+
+knitr::kable(tab,align="lcr",caption = " Model Comparison", "simple")
+
+```
+
+
+
+\
+
+The boxplot below helps visualize the performance of the three machine learning algorithms in predicting coronary heart disease in patients.
+
+```{r,echo=FALSE, comment=NA, warning=FALSE, out.width="70%",fig.align = 'center'}
+
+knitr::include_graphics("/Users/giftypokuaa/Desktop/PROJECT/Results/Side.png")
+
+```
+
+
+
+
+\
+
+The code generated in this study is available on public repository GitHub. Spyder version 5.3.3 from ANACONDA (2022.10) is used to develop all the machine learning algorithms. Python libraries such as scikit-learn (version 1.20) pandas (version 1.52), tensorflow (2.10.0), keras(2.10.0), matplotlib (3.62), etc. were  install for a smooth analysis. The full work is generated in rmarkdown in R version 4.2.1 (2022-06-23).\
+
+
+## Conclusion\
+
+Using Machine Learning techniques help practitioners to anticipate the presence of coronary heart disease with high accuracy, allowing them to apply preventive treatments in  patients with heart disease sooner.\
+This study demonstrated that machine learning algorithms can be used to predict the presence of coronary heart disease in patients with  an accuracy as high as $90\%$. The study also showed that support vector machines outperforms the other machine algorithms in predicting heart disease on this dataset. Neutral network performs poorly on this dataset with an accuracy of $33\%$. Based on this dataset, $10\%$ test size of data improves the models than $20\%$ test data size. Early detection of heart disease in patients not only saves lives; it also protects the quality of life.
+
+```{r,include=FALSE}
+library(psych)
+library(tidyverse)
+library(kableExtra)
+library(knitr)
+library(SmartEDA)
+```
+
+
+
+
+
+
+\newpage
+
+## Appendix 1\
+
+
+
+```{r,include= TRUE,echo=FALSE,comment=NA,warning=FALSE}
+heartc<-subset(heart[c("sex","cp","fbs","restecg","exang","condition")])
+b=ExpCustomStat(heartc,Cvar=c("condition"),gpby=FALSE)
+knitr::kable(b,caption = "Summary Statistics on Patient's Heart Disease Condition", "simple")
+
+```
+
+**Summary Statistics on Predictor Variables**\
+
+```{r,include=FALSE}
+library(reticulate)
+py_install("pandas")
+py_install("matplotlib")
+py_install("seaborn")
+use_python("/Users/giftypokuaa/Library/r-miniconda-arm64/envs/r-reticulate/bin/python")
+```
+
+
+```{python,results="hide",echo=FALSE}
+import numpy
+import os
+import pandas as pd
+import matplotlib.pyplot as plt  
+import seaborn as s
+
+h=pd.read_csv("heart.csv")
+hn=h[["age","trestbps","chol","thalach","oldpeak","thal"]]
+hc=h[["sex","cp","fbs","restecg","exang","condition"]]
+
+
+```
+
+```{python,echo=FALSE,results="Hide"}
+
+hc = hc.astype('object')
+d1=hn.describe()
+d2=hc.describe()
+d1
+d2
+#hc.groupby(["condition"]).count()["sex"]
+```
+
+
+```{r,include= TRUE,echo=FALSE,comment=NA,warning=FALSE}
+
+
+heart$sex <- as.factor(heart$sex)
+heart$cp <- as.factor(heart$cp)
+heart$fbs <- as.factor(heart$fbs)
+heart$exang <- as.factor(heart$exang)
+heart$thal <- as.numeric(heart$thal)
+heart$ restecg<- as.factor( heart$ restecg)
+heart$condition <- as.factor(heart$condition)
+heartc<-subset(heart[c("sex","cp","fbs","restecg","exang","condition")])
+
+
+
+summary(heartc)
+
+
+
+```
+
+
+
+```{r,echo=FALSE,out.width="80%", fig.align = 'center', fig.cap="\\label{fig:figs} Description of Variables in the Heart Disease Dataset from UCI"}
+
+knitr::include_graphics("/Users/giftypokuaa/Desktop/PROJECT/Results/Attributes.png")
+
+```
+
+## Appendix 2
+
+```{python,results="hide",echo=FALSE}
+
+h=pd.read_csv("heart.csv")
+hc=h[["sex","cp","fbs","restecg","exang","slope","ca","condition"]]
+hn=h[["age","trestbps","chol","thalach","oldpeak","thal"]]
+hc = hc.astype('object')
+
+
+plt.figure(figsize=(15,10))
+plt.tight_layout()
+plt1=s.countplot(x="condition", data=hc)
+plt.title("Count plot of Present of Heart Disease in Patients")  
+plt.xlabel(' No Heart Disease(0)       Heart Disease(1) ')  
+plt.ylabel('Frequency') 
+plt.grid()
+plt.show()
+
+s.countplot(data=hc, x="condition", hue="sex")
+plt.title("Present of Heart Disease in Male(1) and Female(0) Patients") 
+plt.xlabel(' No Heart Disease(0)         Heart Disease(1) ')  
+plt.show()
+
+
+p2=s.pairplot(h  , hue="condition")
+plt.title("Pair Plot of Quantitative Predictors in the Data")  
+plt.show()
+```
+
+Correlation Plot of the Quantitative Predictors in the Data based on Heart Condition.\
+
+
+
+
+## REFERENCES\
+
+Akella, A., & Akella, S. (2021). Machine learning algorithms for predicting coronary artery disease: efforts toward an open source solution. Future Science OA, 7(6), FSO698.\
+
+
+Ayatollahi, H., Gholamhosseini, L. & Salehi, M. Predicting coronary artery disease: a comparison between two data mining algorithms. BMC Public Health 19, 448 (2019).\
+
+D. Krishnani, A. Kumari, A. Dewangan, A. Singh and N. S. Naik, "Prediction of Coronary Heart Disease using Supervised Machine Learning Algorithms," TENCON 2019 - 2019 IEEE Region 10 Conference (TENCON), Kochi, India, 2019, pp. 367-372, doi: 10.1109/TENCON.2019.8929434.\
+
+
+Dua, D. and Graff, C. (2019). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.\
+  
+Mahesh, B. (2020). Machine learning algorithms-a review. International Journal of Science and Research (IJSR).[Internet], 9, 381-386.
+  
